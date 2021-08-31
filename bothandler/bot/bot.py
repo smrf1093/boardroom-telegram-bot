@@ -3,7 +3,7 @@ import requests
 import time 
 import json
 # api.telegram.org/bot<your_token>/setWebHook?url=https://<your_ngrok_url.ngrok.io/
-# api.telegram.org/bot1994698934:AAE1EGF_CDsOfrA5_zwbo1lz93LpL5KEvLw/setWebHook?url=https://1adf-139-162-132-152.ngrok.io
+# api.telegram.org/bot1994698934:AAE1EGF_CDsOfrA5_zwbo1lz93LpL5KEvLw/setWebHook?url=https://1039-2a01-7e01-00-f03c-92ff-fe30-eb94.ngrok.io
 
 class _Bot():
     TELEGRAM_URL = "https://api.telegram.org/bot"

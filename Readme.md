@@ -5,6 +5,10 @@ The telegram bot providing commands for interaction with BroadRoom API.
 For webservice provider the Django framework is used, however it could be easily
 replaced with Fast api and ... .
 
+# help
+
+Run /help command to see all available commands
+
 # The bot
 
 The main source code for bot is located in bothandler application and

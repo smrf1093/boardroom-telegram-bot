@@ -12,6 +12,11 @@ from bothandler.bot.bot_commands import (
     ProtocolProposalsCommand,
     MessageCommand,
     ProposalVotesCommand,
+    VotersByAddressCommand,
+    ProtocolVotersCommand,
+    VotersCommand,
+    VoterDetailCommand,
+
 )
 from bothandler.models import (
     Proposal,
@@ -47,30 +52,41 @@ class BroadroomView(View):
             BotChatUser.objects.create(user_bot_id=self.t_chat["id"])
             self.bot.command_executor(command_class=StartCommand(chat_ids=[self.t_chat["id"]]))
         elif command == ProtocolsCommand.IDENTIFIER:
-            self.bot.command_executor(chat_id=self.t_chat["id"], command_class=ProtocolsCommand(chat_ids=[self.t_chat["id"]]))
+            self.bot.command_executor(command_class=ProtocolsCommand(chat_ids=[self.t_chat["id"]]))
         elif ProtocolDetailCommand.IN_IDENTIFIER in command:
             # remove command identifier
             cname = command.replace(ProtocolDetailCommand.IN_IDENTIFIER, '')
-            self.bot.command_executor(chat_id=self.t_chat["id"], command_class=ProtocolDetailCommand(chat_ids=[self.t_chat["id"]]), cname=cname)
+            self.bot.command_executor(command_class=ProtocolDetailCommand(chat_ids=[self.t_chat["id"]]), cname=cname)
         elif command == ProposalsCommand.IDENTIFIER:
-            self.bot.command_executor(chat_id=self.t_chat["id"], command_class=ProposalsCommand(chat_ids=[self.t_chat["id"]]))
+            self.bot.command_executor(command_class=ProposalsCommand(chat_ids=[self.t_chat["id"]]))
         elif ProposalDetailCommand.IN_IDENTIFIER in command: 
             # remove the identifier 
             pid = command.replace(ProposalDetailCommand.IN_IDENTIFIER, '')
             try: 
                 refId = self.bot.get_proposals_by_id(pid)
-                self.bot.command_executor(chat_id=self.t_chat["id"], command_class=ProposalDetailCommand(chat_ids=[self.t_chat["id"]]), refId=refId)
+                self.bot.command_executor(command_class=ProposalDetailCommand(chat_ids=[self.t_chat["id"]]), refId=refId)
             except Proposal.DoesNotExist:
-                self.bot.command_executor(chat_id=self.t_chat["id"], command_class=MessageCommand(chat_ids=[self.t_chat["id"]]), message='Cannot find the detail')
+                self.bot.command_executor(command_class=MessageCommand(chat_ids=[self.t_chat["id"]]), message='Cannot find the detail')
         elif ProtocolProposalsCommand.IN_IDENTIFIER in command:
             cname = command.replace(ProtocolProposalsCommand.IN_IDENTIFIER, '')
-            self.bot.command_executor(chat_id=self.t_chat["id"], command_class=ProtocolProposalsCommand(chat_ids=[self.t_chat["id"]]), cname=cname)
+            self.bot.command_executor(command_class=ProtocolProposalsCommand(chat_ids=[self.t_chat["id"]]), cname=cname)
         elif ProposalVotesCommand.IN_IDENTIFIER in command:
             pid = command.replace(ProposalVotesCommand.IN_IDENTIFIER, '')
             refId = self.bot.get_proposals_by_id(pid)
-            self.bot.command_executor(chat_id=self.t_chat["id"], command_class=ProposalVotesCommand(chat_ids=[self.t_chat["id"]]), refId=refId)
+            self.bot.command_executor(command_class=ProposalVotesCommand(chat_ids=[self.t_chat["id"]]), refId=refId)
+        elif VotersByAddressCommand.IN_IDENTIFIER in command:
+            address = command.replace(VotersByAddressCommand.IN_IDENTIFIER, '')
+            self.bot.command_executor(command_class=VotersByAddressCommand(chat_ids=[self.t_chat["id"]]), address=address)
+        elif ProtocolVotersCommand.IN_IDENTIFIER in command:
+            cname = command.replace(ProtocolVotersCommand.IN_IDENTIFIER, '')
+            self.bot.command_executor(command_class=ProtocolVotersCommand(chat_ids=[self.t_chat["id"]]), cname=cname)
+        elif VotersCommand.IDENTIFIER == command:
+            self.bot.command_executor(command_class=VotersCommand(chat_ids=[self.t_chat["id"]]))
+        elif VoterDetailCommand.IN_IDENTIFIER in command:
+            address = command.replace(VoterDetailCommand.IN_IDENTIFIER, '')
+            self.bot.command_executor(command_class=VoterDetailCommand(chat_ids=[self.t_chat["id"]]), address=address)
         else:
-            self.bot.command_executor(chat_id=self.t_chat["id"], command_class=HelpCommand(chat_ids=[self.t_chat["id"]]))
+            self.bot.command_executor(command_class=HelpCommand(chat_ids=[self.t_chat["id"]]))
             
 
         return JsonResponse({"ok": "POST request processed"})

@@ -43,6 +43,10 @@ class HelpCommand(Command):
         self.msg += "/refid<id>  get details of a proposal \n"
         self.msg += "/protocolproposals<cname>  get proposals for a protocol  \n"
         self.msg += "/proposalsvotes<id>  get votes for a proposals   \n"
+        self.msg += "/voteraddress<address>  get voters for an address   \n"
+        self.msg += "/voters  get all voters   \n"
+        self.msg += "/votersdetail<address>  get a voter   \n"
+        
         return super().execute(**kwargs)
 
 
@@ -64,6 +68,7 @@ class ProtocolsCommand(Command):
         if 'data' in json_response:
             for protocol in json_response['data']:
                 self.msg += f"{protocol['name']} - /pdetail{protocol['cname']} \n"
+                self.msg += f"{protocol['name']} votes - /protocolvotes{protocol['cname']} \n"
             self.msg += "Use the names to access a Single protocol info"
         else:
             self.msg = 'Some error happend from api side'
@@ -156,12 +161,18 @@ class ProposalVotesCommand(Command):
         if 'data' in json_response:
             for vote in json_response['data']:
                 self.msg += f"{self.convert_dict_to_text_v2(vote)} \n"
+                self.msg += f"/voteraddress{vote['address']} \n"
         else:
             self.msg = 'Oops there is a problem'
         return super().execute(**kwargs)
 
 
 class VotersByAddressCommand(Command):
+    """
+        The voter address should be included here 
+    """
+    IN_IDENTIFIER = 'voteraddress'
+
     def execute(self, **kwargs):
         json_response = self.api_handler.get_votes_by_voters(kwargs['address'])
         if 'data' in json_response:
@@ -174,7 +185,7 @@ class VotersByAddressCommand(Command):
 
 class ProtocolVotersCommand(Command):
 
-    IN_IDENTIFIER = ''
+    IN_IDENTIFIER = 'protocolvotes'
 
     def execute(self, **kwargs):
         json_response = self.api_handler.get_protocol_voters(kwargs['cname'])
@@ -186,17 +197,24 @@ class ProtocolVotersCommand(Command):
         return super().execute(**kwargs)
 
 
-class VotersCommad(Command):
+class VotersCommand(Command):
+
+    IDENTIFIER = 'voters'
+
     def execute(self, **kwargs):
         json_response = self.api_handler.get_voters()
         if 'data' in json_response:
             for voter in json_response['data']:
                 self.msg += f"{self.convert_dict_to_text_v2(voter)} \n"
+                self.msg += f"/votersdetail{voter['address']} \n"
         else:
             self.msg = 'Oops there is a problem'
         return super().execute(**kwargs)
 
 class VoterDetailCommand(Command):
+
+    IN_IDENTIFIER = 'votersdetail'
+
     def execute(self, **kwargs):
         json_response = self.api_handler.get_single_voter(kwargs['address'])
         if 'data' in json_response:
@@ -205,6 +223,7 @@ class VoterDetailCommand(Command):
         else:
             self.msg = 'Oops there is a problem'
         return super().execute(**kwargs)
+
 
 class StatCommand(Command):
     def execute(self, **kwargs):
