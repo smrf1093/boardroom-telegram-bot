@@ -124,3 +124,14 @@ STATIC_URL = '/static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'   
+# We're going to have our tasks rolling soon, so that will be handy 
+CELERY_BEAT_SCHEDULE = {
+    'send-notification-every-hour': {
+        'task': 'notify_subscribers', 
+        'schedule': 300.0,
+    }
+}
+

@@ -16,3 +16,6 @@ sqlparse==0.4.1
 typing-extensions==3.10.0.0
 urllib3==1.26.6
 yarl==1.6.3
+celery==4.2
+redis==2.10.6
+django_celery_beat==1.1.1

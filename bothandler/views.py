@@ -16,11 +16,17 @@ from bothandler.bot.bot_commands import (
     ProtocolVotersCommand,
     VotersCommand,
     VoterDetailCommand,
+    SubscribeToProposalVotesCommmand,
+    UnSubscribeToProposalVotesCommand,
+    SubscribeVoteByVoterAddress,
+    UnSubscribeVoteByVoterAddress
 
 )
 from bothandler.models import (
     Proposal,
-    BotChatUser
+    BotChatUser,
+    ProposalVoteSibscribe,
+    VotersVoteSubscribe
 )
 # Create your views here.
 from django.views import View
@@ -85,6 +91,29 @@ class BroadroomView(View):
         elif VoterDetailCommand.IN_IDENTIFIER in command:
             address = command.replace(VoterDetailCommand.IN_IDENTIFIER, '')
             self.bot.command_executor(command_class=VoterDetailCommand(chat_ids=[self.t_chat["id"]]), address=address)
+        elif SubscribeToProposalVotesCommmand.IN_IDENTIFIER in command:
+            pid = command.replace(SubscribeToProposalVotesCommmand.IN_IDENTIFIER, '')
+            refId = self.bot.get_proposals_by_id(pid)
+            ProposalVoteSibscribe.objects.create(user=BotChatUser.objects.get(user_bot_id=self.t_chat["id"]), ref_id=refId)
+            self.bot.command_executor(command_class=SubscribeToProposalVotesCommmand(chat_ids=[self.t_chat["id"]]))
+        elif UnSubscribeToProposalVotesCommand.IN_IDENTIFIER in command:
+            pid = command.replace(UnSubscribeToProposalVotesCommand.IN_IDENTIFIER, '')
+            refId = self.bot.get_proposals_by_id(pid)
+            proposal_subscriber = ProposalVoteSibscribe.objects.get(user=BotChatUser.objects.get(user_bot_id=self.t_chat["id"]), ref_id=refId)
+            proposal_subscriber.delete()
+            self.bot.command_executor(command_class=UnSubscribeToProposalVotesCommand(chat_ids=[self.t_chat["id"]]))
+        elif SubscribeVoteByVoterAddress.IN_IDENTIFIER in command:
+            address = command.replace(SubscribeVoteByVoterAddress.IN_IDENTIFIER, '')
+            VotersVoteSubscribe.objects.create(user=BotChatUser.objects.get(user_bot_id=self.t_chat["id"]), address=address)
+            self.bot.command_executor(command_class=SubscribeVoteByVoterAddress(chat_ids=[self.t_chat["id"]]))
+        elif UnSubscribeVoteByVoterAddress.IN_IDENTIFIER in command:
+            address = command.replace(UnSubscribeVoteByVoterAddress.IN_IDENTIFIER, '')
+            try:
+                subscriber = VotersVoteSubscribe.objects.get(user=self.t_chat["id"], address=address)
+                subscriber.delete()
+            except VotersVoteSubscribe.DoesNotExist:
+                pass
+            self.bot.command_executor(command_class=UnSubscribeVoteByVoterAddress(chat_ids=[self.t_chat["id"]]))
         else:
             self.bot.command_executor(command_class=HelpCommand(chat_ids=[self.t_chat["id"]]))
             

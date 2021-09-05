@@ -46,6 +46,8 @@ class HelpCommand(Command):
         self.msg += "/voteraddress<address>  get voters for an address   \n"
         self.msg += "/voters  get all voters   \n"
         self.msg += "/votersdetail<address>  get a voter   \n"
+        self.msg += "/subscribeproposalvotes<id>  subscribe for all votes for a proposal   \n"
+        self.msg += "/unsubscribeproposalvotes<id>  unsubscribe for all votes for a proposal   \n"
         
         return super().execute(**kwargs)
 
@@ -115,6 +117,8 @@ class ProposalsCommand(Command):
                 self.msg += f"Available Commands: \n"
                 self.msg += f"Details: /refId{proposal['id']} \n"
                 self.msg += f"Votes: /proposalvotes{proposal['id']} \n"
+                self.msg += f"Subscribe To Votes: /subscribeproposalvotes{proposal['id']} \n"
+                self.msg += f"Unsubscribe From Votes: /unsubscribeproposalvotes{proposal['id']} \n"
                 Proposal.objects.get_or_create(p_id=proposal['id'].lower(), ref_id=proposal['refId'])
                 
             self.msg += "Use /refId<id> to access a specific proposal information"
@@ -240,3 +244,40 @@ class MessageCommand(Command):
     def execute(self, **kwargs):
         self.msg = kwargs['message']
         return super().execute(**kwargs)
+
+
+class SubscribeToProposalVotesCommmand(Command):
+
+    IN_IDENTIFIER = 'subscribeproposalvotes'
+
+    def execute(self, **kwargs):
+        self.msg = "You have successfully subscried to this proposal votes"
+        return super().execute(**kwargs)
+
+
+class UnSubscribeToProposalVotesCommand(Command):
+
+    IN_IDENTIFIER = 'unsubscribeproposalvotes'
+
+    def execute(self, **kwargs):
+        self.msg = "You have successfully unsubscried from this proposal votes"
+        return super().execute(**kwargs)
+
+
+class SubscribeVoteByVoterAddress(Command):
+
+    IN_IDENTIFIER = 'subscribevotebyvoteraddress'
+
+    def execute(self, **kwargs):
+        self.msg = 'You successfully subscribed to this voter'
+        return super().execute(**kwargs)
+
+
+class UnSubscribeVoteByVoterAddress(Command):
+
+    IN_IDENTIFIER = 'subscribevotebyvoteraddress'
+
+    def execute(self, **kwargs):
+        self.msg = 'You have successfully unsubscribed from this voter\' votes'
+        return super().execute(**kwargs)
+

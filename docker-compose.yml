@@ -1,0 +1,5 @@
+redis:
+  image: redis
+  container_name: brapi_celery_broker
+  expose:
+    - 6379
