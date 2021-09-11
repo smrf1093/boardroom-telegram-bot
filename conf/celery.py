@@ -1,9 +1,17 @@
 import os 
 from celery import Celery 
-# Set default Django settings 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'conf.settings') 
-app = Celery('conf')   
-# Celery will apply all configuration keys with defined namespace  
-# app.config_from_object('conf:settings', namespace='CELERY')   
-# Load tasks from all registered apps 
+
+# set the default Django settings module for the 'celery' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'conf.settings')
+
+app = Celery('bot')
+
+# Using a string here means the worker doesn't have to serialize
+# the configuration object to child processes.
+# - namespace='CELERY' means all celery-related configuration keys
+#   should have a `CELERY_` prefix.
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+# Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
+# app.conf.enable_utc = False

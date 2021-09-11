@@ -1,0 +1,12 @@
+add more button for nextCursor
+today top 10 hits
+today top 10 protocols
+
+Run lint, pre-commit
+Add images to README
+Add alerting details to README
+add caching feature to README
+explain configs: such as telegram token
+
+
+if proposal cancelel or executed -> delete from queue
