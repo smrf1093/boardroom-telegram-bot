@@ -4,21 +4,19 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![GitHub license](https://img.shields.io/github/license/seyedrezafar/boardroom-telegram-bot)](https://github.com/seyedrezafar/boardroom-telegram-bot/blob/master/LICENSE)
 
-
 The telegram bot providing commands for interaction with BroadRoom API.
 
 For webservice provider the Django framework is used, however it could be easily
 replaced with Fast api and ... .
 
-
 # Quickstart
+
 To install and use follow the below instructions:
 
 ```sh
 $ cp .env.example .env # edit with your favorite editor!
 $ docker-compose up -d
 ```
-
 
 # Modularity
 

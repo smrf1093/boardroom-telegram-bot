@@ -1,6 +1,5 @@
-
 def extract_user_data_from_update(update):
-    """ python-telegram-bot's Update instance --> User info """
+    """python-telegram-bot's Update instance --> User info."""
     if update.message is not None:
         user = update.message.from_user.to_dict()
     elif update.inline_query is not None:
@@ -17,9 +16,5 @@ def extract_user_data_from_update(update):
     return dict(
         user_id=user["id"],
         is_blocked_bot=False,
-        **{
-            k: user[k]
-            for k in ["username"]
-            if k in user and user[k] is not None
-        },
+        **{k: user[k] for k in ["username"] if k in user and user[k] is not None},
     )

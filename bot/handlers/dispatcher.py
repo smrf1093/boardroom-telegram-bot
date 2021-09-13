@@ -1,27 +1,16 @@
-"""
-    Telegram event handlers
-"""
-
-import telegram
-from telegram.ext import (
-    Updater, Dispatcher, 
-    CommandHandler,
-    CallbackQueryHandler,
-)
-from .commands import command_start
+"""Telegram event handlers."""
 
 from celery import task  # event processing in async mode
-
-from conf.settings import TELEGRAM_TOKEN
+import telegram
+from telegram.ext import CallbackQueryHandler, CommandHandler, Dispatcher, Updater
 
 from bot.handlers.button_dispatcher import button_dispatcher
-
+from conf.settings import TELEGRAM_TOKEN
+from .commands import command_start
 
 
 def setup_dispatcher(dp):
-    """
-    Adding handlers for events from Telegram
-    """
+    """Adding handlers for events from Telegram."""
 
     dp.add_handler(CommandHandler("start", command_start))
     dp.add_handler(CallbackQueryHandler(button_dispatcher))
@@ -30,14 +19,14 @@ def setup_dispatcher(dp):
 
 
 def run_pooling():
-    """ Run bot in pooling mode """
+    """Run bot in pooling mode."""
     updater = Updater(TELEGRAM_TOKEN, use_context=True)
 
     dp = updater.dispatcher
     dp = setup_dispatcher(dp)
 
     bot_info = telegram.Bot(TELEGRAM_TOKEN).get_me()
-    bot_link = f"https://t.me/" + bot_info["username"]
+    bot_link = f"https://t.me/{bot_info['username']}"
 
     print(f"Pooling of '{bot_link}' started")
     updater.start_polling()

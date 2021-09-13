@@ -38,10 +38,10 @@ jobs:
         coverage run -m pytest
         coverage report
         
-    - name: "Upload coverage to Codecov"
-      uses: codecov/codecov-action@v1
-      with:
-        fail_ci_if_error: true
+    # - name: "Upload coverage to Codecov"
+    #   uses: codecov/codecov-action@v1
+    #   with:
+    #     fail_ci_if_error: true
 
   pypi-publish:
     # Only publish if all other jobs succeed

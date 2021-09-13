@@ -1,11 +1,11 @@
 import json
 import logging
-from django.views import View
+
 from django.http import JsonResponse
+from django.views import View
 
+from bot.handlers.dispatcher import TELEGRAM_BOT_USERNAME, process_telegram_event
 from conf.settings import DEBUG
-
-from bot.handlers.dispatcher import process_telegram_event, TELEGRAM_BOT_USERNAME
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ def index(request):
 
 
 class TelegramBotWebhookView(View):
-    # WARNING: if fail - Telegram webhook will be delivered again. 
+    # WARNING: if fail - Telegram webhook will be delivered again.
     # Can be fixed with async celery task execution
     def post(self, request, *args, **kwargs):
         if DEBUG:
@@ -28,6 +28,6 @@ class TelegramBotWebhookView(View):
         # TODO: there is a great trick to send data in webhook response
         # e.g. remove buttons
         return JsonResponse({"ok": "POST request processed"})
-    
+
     def get(self, request, *args, **kwargs):  # for debug
         return JsonResponse({"ok": "Get request processed. But nothing done"})
