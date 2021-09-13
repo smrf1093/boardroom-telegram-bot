@@ -18,37 +18,32 @@ $ cp .env.example .env # edit with your favorite editor!
 $ docker-compose up -d
 ```
 
+# Demo
+
+A live version of the bot is available at:
+
+https://t.me/hhio618_bot
+
+[![Watch the video](https://img.youtube.com/vi/mHbO9RZeg3M/maxresdefault.jpg)](https://youtu.be/mHbO9RZeg3M)
+
 # Modularity
 
-The source code is modular, so if any other library need to be used for sending bot messages it could be easily done by overriding the login of send_message and send_bulk_message in bot source code.
+The source code have been written with modularity in the mind. So every part could be changed or can be extended easily without too much effect on other parts.
 
-# help
+# Help
 
 Run /help command to see all available commands
 
-# The bot
+# Bot source code
 
-The main source code for bot is located in bothandler application and
-also it could be placed anywhere else.
-The bot folder contains the following files:
+This is a bot for boardroom API written based on Django Framework. The Django ORM and modeling is used for caching and storing data where needed.
 
-## api_handler
+The main django configurations resides in conf folder and there is one Django application called bot in the project that handles the Telegram bot views, models, tasks and extra.
 
-This file handles the interactions with broadroom api
+# Subscription & Alerting
 
-## bot_commands
+The following celery tasks are written to handle Alerting and Subscription:
 
-This file contains the bot's commands they use functions from api_handler
+ProposalUpdateTgView: this task view check whether the subscribed proposal by user have been changed or not, if it is changed then it will notify the subscried users.
 
-## bot
-
-Contains the bot which handle commands using the classes from bot_commands
-s
-
-# Celery and Subscription
-
-For subscription mechanism the celery and django celer were used, the following command needs to run the tasks every 5 minutes:
-
-`celery -A conf beat -l INFO`
-
-Redis is used as the broker for celery, so it should be run on the system. There is a docker-compose file in the project root that contains instruction for running an instance of Redis.
+ProposalPeriodtgView: This is a alerting mechanism that users can toggle it on or off. if the user toggle it on the information for top proposal will be send for user periodically.
