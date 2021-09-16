@@ -27,16 +27,17 @@ https://t.me/hhio618_bot
 [![Watch the video](https://img.youtube.com/vi/mHbO9RZeg3M/maxresdefault.jpg)](https://youtu.be/mHbO9RZeg3M)
 
 ## Features
-+ Proposal period notifications
-+ Track proposal voting
-+ Easy UX for better navigation
-+ Manage subscriptions
-+ List top proposals and protocols
-+ Supports API pagination
+
+- Proposal period notifications
+- Track proposal voting
+- Easy UX for better navigation
+- Manage subscriptions
+- List top proposals and protocols
+- Supports API pagination
 
 ## Bot source code
 
-This is a bot for boardroom API written based on Django Framework. The Django ORM is used for caching and storing data where needed.  
+This is a bot for boardroom API written based on Django Framework. The Django ORM is used for caching and storing data where needed.\
 The main django configurations resides in conf folder and there is one Django application called bot in the project that handles the Telegram bot views, models, tasks and extra.
 
 ## Subscription & Alerting
@@ -44,7 +45,9 @@ The main django configurations resides in conf folder and there is one Django ap
 There are two type of alerts provided:
 
 ### ProposalUpdateTgView
+
 this task view check whether the subscribed proposals by user have been changed or not, if it is changed then it will notify the subscribed users.
 
 ### ProposalPeriodTgView
+
 This is a alerting mechanism that users can toggle it on or off. it will send proposal period alerts whenever a proposal voting end date is reached below a certain time period, e.g. 5 days, 3 days, ...
